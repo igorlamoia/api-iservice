@@ -2,4 +2,5 @@
 global $routes;
 $routes = array();
 // Url criada = Controller chamado/funcaoCriada
-$routes['/api/cartao/testeconexao'] = '/TesteConexao/testeConexao';
+$routes['/cadastrar/requisitante'] = '/Requisitante/cadastrar';
+$routes['/listar/requisitante'] = '/Requisitante/buscarDadosRequisitante';
