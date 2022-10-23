@@ -2,6 +2,13 @@
 
 namespace Controllers;
 
+header('Access-Control-Allow-Origin: *');
+
+header('Access-Control-Allow-Methods: GET, POST');
+
+header("Access-Control-Allow-Headers: X-Requested-With");
+
+
 use \Core\Controller;
 use Models\Endereco;
 use \Models\Requisitante;
@@ -22,6 +29,8 @@ class RequisitanteController extends Controller
 
 
         $codRequisitante = $requisitanteModel->cadastrar($data);
+        if($codRequisitante) return $this->returnJson(['mensagem' => 'Requisitante cadastrado com sucesso!'], 201);
+        return $this->returnJson(['mensagem' => 'Erro ao cadastrar requisitante!'], 503);
         // var_dump($codRequisitante);
         if (!$codRequisitante) return $this->returnJson(['mensagem' => 'Erro ao cadastrar requisitante!'], 500);
 

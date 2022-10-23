@@ -25,7 +25,8 @@ class Requisitante extends Model
             $sql->bindValue(':idFirebase', $data['idFirebase']);
 
             $sql->execute();
-            return $this->db->lastInsertId();
+            return true;
+            // return $this->db->lastInsertId(); TODO ajustar o banco
         } catch (\PDOException $th) {
             $controller = new Controller();
             $controller->returnJson(['mensagem' => 'Erro ao cadastrar requisitante :(', 'erro' => $th->errorInfo[2]], 500);
