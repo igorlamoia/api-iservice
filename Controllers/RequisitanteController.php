@@ -5,7 +5,7 @@ namespace Controllers;
 use \Core\Controller;
 use Models\Endereco;
 use \Models\Requisitante;
-use Providers\EnderecoProvider;
+use \Providers\Endereco as EnderecoProvider;
 
 class RequisitanteController extends Controller
 {
@@ -22,6 +22,7 @@ class RequisitanteController extends Controller
 
 
         $codRequisitante = $requisitanteModel->cadastrar($data);
+        // var_dump($codRequisitante);
         if (!$codRequisitante) return $this->returnJson(['mensagem' => 'Erro ao cadastrar requisitante!'], 500);
 
         $codEndereco = EnderecoProvider::buscarOuCadastrarCodEndereco($data);

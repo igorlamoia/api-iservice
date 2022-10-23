@@ -3,9 +3,9 @@
 namespace Providers;
 use \Models\Endereco as EnderecoModel;
 
-class EnderecoProvider
+class Endereco
 {
-    static function buscarOuCadastrarCodEndereco($data)
+    public static function buscarOuCadastrarCodEndereco($data)
     {
         $endereco = new EnderecoModel();
         $codEnd = $endereco->buscarCodEndereco($data);
@@ -15,7 +15,7 @@ class EnderecoProvider
         return $codEnd;
 
     }
-    static function buscarEnderecosRequisitante($codRequisitante) {
+    public static function buscarEnderecosRequisitante($codRequisitante) {
         $endereco = new EnderecoModel();
         return $endereco->buscarEnderecosRequisitante($codRequisitante);
     }
