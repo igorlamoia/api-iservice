@@ -12,16 +12,16 @@ class Requisitante extends Model
 
         try {
             $sql = "INSERT INTO requisitante
-                (nome, cpf, email, numTelefone, endNumero, endComplemento, idFirebase)
-            VALUES (:nome, :cpf, :email, :numTelefone, :endNumero, :endComplemento, :idFirebase)";
+                (nome, cpf, email, numTelefone, idFirebase)
+            VALUES (:nome, :cpf, :email, :numTelefone, :idFirebase)";
 
             $sql = $this->db->prepare($sql);
             $sql->bindValue(':nome', $data['nome']);
             $sql->bindValue(':cpf', $data['cpf']);
             $sql->bindValue(':email', $data['email']);
             $sql->bindValue(':numTelefone', $data['numTelefone']);
-            $sql->bindValue(':endNumero', $data['endNumero']);
-            $sql->bindValue(':endComplemento', $data['endComplemento']);
+            // $sql->bindValue(':endNumero', $data['endNumero']);
+            // $sql->bindValue(':endComplemento', $data['endComplemento']);
             $sql->bindValue(':idFirebase', $data['idFirebase']);
 
             $sql->execute();
