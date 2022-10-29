@@ -136,121 +136,121 @@ CREATE TABLE PrestadorNota (
     fk_Nota_codNota INTEGER,
     PRIMARY KEY (fk_Prestador_codPrestador, fk_Nota_codNota)
 );
- 
+
 ALTER TABLE Prestador ADD CONSTRAINT FK_Prestador_2
     FOREIGN KEY (fk_Usuario_codUsuario)
     REFERENCES Usuario (codUsuario)
     ON DELETE CASCADE;
- 
+
 ALTER TABLE DemandaEscolher ADD CONSTRAINT FK_DemandaEscolher_1
     FOREIGN KEY (fk_Prestador_codPrestador)
     REFERENCES Prestador (codPrestador);
- 
+
 ALTER TABLE DemandaEscolher ADD CONSTRAINT FK_DemandaEscolher_2
     FOREIGN KEY (fk_Usuario_codUsuario)
     REFERENCES Usuario (codUsuario);
-    
+
 ALTER TABLE Atendimento ADD CONSTRAINT FK_Atendimento_1
     FOREIGN KEY (fk_DemandaEscolher_codUsuario)
     REFERENCES DemandaEscolher (fk_Usuario_codUsuario);
- 
+
 ALTER TABLE Atendimento ADD CONSTRAINT FK_Atendimento_2
     FOREIGN KEY (fk_DemandaEscolher_codPrestador)
     REFERENCES DemandaEscolher (fk_Prestador_codPrestador);
- 
+
 ALTER TABLE Especialidade ADD CONSTRAINT FK_Especialidade_2
     FOREIGN KEY (fk_Categoria_codCategoria)
     REFERENCES Categoria (codCategoria)
     ON DELETE RESTRICT;
-    
+
 ALTER TABLE Chat ADD CONSTRAINT FK_Chat_1
     FOREIGN KEY (fk_DemandaEscolher_codUsuario)
     REFERENCES DemandaEscolher (fk_Usuario_codUsuario);
- 
+
 ALTER TABLE Chat ADD CONSTRAINT FK_Chat_2
     FOREIGN KEY (fk_DemandaEscolher_codPrestador)
     REFERENCES DemandaEscolher (fk_Prestador_codPrestador);
- 
+
 ALTER TABLE Cidade ADD CONSTRAINT FK_Cidade_2
     FOREIGN KEY (fk_Estado_codEstado)
     REFERENCES Estado (codEstado)
     ON DELETE RESTRICT;
- 
+
 ALTER TABLE Nota ADD CONSTRAINT FK_Nota_2
     FOREIGN KEY (fk_Atendimento_codAtendimento)
     REFERENCES Atendimento (codAtendimento)
     ON DELETE CASCADE;
- 
+
 ALTER TABLE PrestadorEspecialidade ADD CONSTRAINT FK_PrestadorEspecialidade_1
     FOREIGN KEY (fk_Especialidade_codEspecialidade)
     REFERENCES Especialidade (codEspecialidade)
     ON DELETE RESTRICT;
- 
+
 ALTER TABLE PrestadorEspecialidade ADD CONSTRAINT FK_PrestadorEspecialidade_2
     FOREIGN KEY (fk_Prestador_codPrestador)
     REFERENCES Prestador (codPrestador)
     ON DELETE RESTRICT;
- 
+
 ALTER TABLE PrestadorAvaliaAtendimento ADD CONSTRAINT FK_PrestadorAvaliaAtendimento_1
     FOREIGN KEY (fk_Prestador_codPrestador)
     REFERENCES Prestador (codPrestador)
     ON DELETE RESTRICT;
- 
+
 ALTER TABLE PrestadorAvaliaAtendimento ADD CONSTRAINT FK_PrestadorAvaliaAtendimento_2
     FOREIGN KEY (fk_Atendimento_codAtendimento)
     REFERENCES Atendimento (codAtendimento)
     ON DELETE RESTRICT;
- 
+
 ALTER TABLE UsuarioAvaliaAtendimento ADD CONSTRAINT FK_UsuarioAvaliaAtendimento_1
     FOREIGN KEY (fk_Usuario_codUsuario)
     REFERENCES Usuario (codUsuario)
     ON DELETE RESTRICT;
- 
+
 ALTER TABLE UsuarioAvaliaAtendimento ADD CONSTRAINT FK_UsuarioAvaliaAtendimento_2
     FOREIGN KEY (fk_Atendimento_codAtendimento)
     REFERENCES Atendimento (codAtendimento)
     ON DELETE RESTRICT;
- 
+
 ALTER TABLE UsuarioEndereco ADD CONSTRAINT FK_UsuarioEndereco_1
     FOREIGN KEY (fk_Endereco_codEnd)
     REFERENCES Endereco (codEnd)
     ON DELETE RESTRICT;
- 
+
 ALTER TABLE UsuarioEndereco ADD CONSTRAINT FK_UsuarioEndereco_2
     FOREIGN KEY (fk_Usuario_codUsuario)
     REFERENCES Usuario (codUsuario)
     ON DELETE RESTRICT;
- 
+
 ALTER TABLE PrestadorCidade ADD CONSTRAINT FK_PrestadorCidade_1
     FOREIGN KEY (fk_Cidade_codCidade)
     REFERENCES Cidade (codCidade)
     ON DELETE RESTRICT;
- 
+
 ALTER TABLE PrestadorCidade ADD CONSTRAINT FK_PrestadorCidade_2
     FOREIGN KEY (fk_Prestador_codPrestador)
     REFERENCES Prestador (codPrestador)
     ON DELETE RESTRICT;
- 
+
 ALTER TABLE UsuarioNota ADD CONSTRAINT FK_UsuarioNota_1
     FOREIGN KEY (fk_Usuario_codUsuario)
     REFERENCES Usuario (codUsuario)
     ON DELETE RESTRICT;
- 
+
 ALTER TABLE UsuarioNota ADD CONSTRAINT FK_UsuarioNota_2
     FOREIGN KEY (fk_Nota_codNota)
     REFERENCES Nota (codNota)
     ON DELETE RESTRICT;
- 
+
 ALTER TABLE PrestadorNota ADD CONSTRAINT FK_PrestadorNota_1
     FOREIGN KEY (fk_Prestador_codPrestador)
     REFERENCES Prestador (codPrestador)
     ON DELETE RESTRICT;
- 
+
 ALTER TABLE PrestadorNota ADD CONSTRAINT FK_PrestadorNota_2
     FOREIGN KEY (fk_Nota_codNota)
     REFERENCES Nota (codNota)
     ON DELETE RESTRICT;
-    
+
 /* Povoando o BD */
 /* Endereço */
 insert into Endereco (rua, bairro, cep, cidade, estado) values ('Rua A', 'Centro', '36700000', 'Leopoldina', 'Minas
@@ -325,9 +325,9 @@ insert into Estado (nome) values ('Rio de Janeiro');
 insert into Estado (nome) values ('São Paulo');
 
 /* Cidade */
-insert into Cidade (nome, fk_Estado_codEstado) values ('Leopoldina', 0001);
-insert into Cidade (nome, fk_Estado_codEstado) values ('Cataguases', 0001);
-insert into Cidade (nome, fk_Estado_codEstado) values ('Rio de Janeiro', 0002);
+insert into Cidade (nome, fk_Estado_codEstado) values ('Leopoldina', 31);
+insert into Cidade (nome, fk_Estado_codEstado) values ('Cataguases', 31);
+insert into Cidade (nome, fk_Estado_codEstado) values ('Rio de Janeiro', 33);
 
 /* Prestador Cidade */
 insert into PrestadorCidade (fk_Prestador_codPrestador, fk_Cidade_codCidade) values (0001, 0001);
@@ -414,3 +414,6 @@ insert into UsuarioAvaliaAtendimento (fk_Usuario_codUsuario, fk_Atendimento_codA
 insert into UsuarioAvaliaAtendimento (fk_Usuario_codUsuario, fk_Atendimento_codAtendimento, data, texto, linkFoto, linkVideo, linkAudio) values (0002, 0003, '2022-06-07 11:55:00', 'Um ótimo prestador de serviço', null, null, null);
 insert into UsuarioAvaliaAtendimento (fk_Usuario_codUsuario, fk_Atendimento_codAtendimento, data, texto, linkFoto, linkVideo, linkAudio) values (0002, 0004, '2022-06-08 08:25:20', 'Um ótimo prestador de serviço', null, null, null);
 insert into UsuarioAvaliaAtendimento (fk_Usuario_codUsuario, fk_Atendimento_codAtendimento, data, texto, linkFoto, linkVideo, linkAudio) values (0003, 0005, '2022-06-09 13:55:05', 'Um ótimo prestador de serviço', null, null, null);
+
+/* Insere todos os estados BRASILEIROS com código do IBGE */
+INSERT INTO estado (codEstado, nome) VALUES (11, "RO"), (12, "AC"), (13, "AM"), (14, "RR"), (15, "PA"), (16, "AP"), (17, "TO"), (21, "MA"), (22, "PI"), (23, "CE"), (24, "RN"), (25, "PB"), (26, "PE"), (27, "AL"), (28, "SE"), (29, "BA"), (31, "MG"), (32, "ES"), (33, "RJ"), (35, "SP"), (41, "PR"), (42, "SC"), (43, "RS"), (50, "MS"), (51, "MT"), (52, "GO"), (53, "DF");
