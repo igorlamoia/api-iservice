@@ -29,7 +29,6 @@ class Endereco extends Model
     }
   }
 
-
   public function cadastrar($data)
   {
     try {
@@ -76,21 +75,111 @@ class Endereco extends Model
     }
   }
 
-  public function buscarEnderecosRequisitante($codRequisitante) {
+  public function buscarEnderecosUsuario($codUsuario) {
     try {
       $sql = "SELECT * FROM endereco
-              INNER JOIN requisitante_possui_endereco
-              ON requisitante_possui_endereco.fk_Endereco_codEnd = endereco.codEnd
-              WHERE requisitante_possui_endereco.fk_Requisitante_codRequisitante = :codRequisitante";
+              INNER JOIN usuarioendereco
+              ON usuarioendereco.fk_Endereco_codEnd = endereco.codEnd
+              WHERE usuarioendereco.fk_Usuario_codUsuario = :codUsuario";
 
       $sql = $this->db->prepare($sql);
-      $sql->bindValue(':codRequisitante', $codRequisitante);
+      $sql->bindValue(':codUsuario', $codUsuario);
       $sql->execute();
 
       return $sql->fetchAll(\PDO::FETCH_ASSOC);
     } catch (\Throwable $th) {
       $controller = new Controller();
       $controller->returnJson(['mensagem' => 'Erro ao listar requisitante!', 'erro' => $th->errorInfo[2]], 500);
+      return false;
+    }
+  }
+
+  public function buscarCodCidade ($data) {
+    try {
+      $sql = "SELECT codCidade FROM cidade c INNER JOIN estado e ON c.fk_Estado_codEstado = e.codEstado
+        WHERE c.nome = :nomeCidade AND c.fk_Estado_codEstado = :codEstado";
+
+      $sql = $this->db->prepare($sql);
+      $sql->bindValue(':nomeCidade', $data['nomeCidade']);
+      $sql->bindValue(':codEstado', $data['codEstado']);
+      $sql->execute();
+      if($sql->rowCount() > 0) {
+        return $sql->fetch(\PDO::FETCH_ASSOC)['codCidade'];
+      }
+      return false;
+    } catch (\Throwable $th) {
+      $controller = new Controller();
+      $controller->returnJson(['mensagem' => 'Erro ao listar requisitante!', 'erro' => $th->errorInfo], 500);
+      return false;
+    }
+  }
+
+  public function buscarCidade ($data) {
+    try {
+      $sql = "SELECT codCidade, codEstado, c.nome as 'nomeCidade', e.nome as 'UF'
+        FROM cidade c INNER JOIN estado e ON c.fk_Estado_codEstado = e.codEstado
+        WHERE c.nome = :nomeCidade AND c.fk_Estado_codEstado = :codEstado";
+
+      $sql = $this->db->prepare($sql);
+      $sql->bindValue(':nomeCidade', $data['nomeCidade']);
+      $sql->bindValue(':nomeCidade', $data['codEstado']);
+      $sql->execute();
+      // if($sql->rowCount() > 0) {
+      //   return $sql->fetch(\PDO::FETCH_ASSOC);
+      // }
+      return $sql->fetch(\PDO::FETCH_ASSOC);
+    } catch (\Throwable $th) {
+      $controller = new Controller();
+      $controller->returnJson(['mensagem' => 'Erro ao buscar codCidade!', 'erro' => $th->errorInfo[2]], 500);
+      return false;
+    }
+  }
+
+  public function cadastrarCidade ($data) {
+    try {
+      $sql = "INSERT INTO cidade (nome, fk_Estado_codEstado) VALUES (:nomeCidade, :codEstado)";
+
+      $sql = $this->db->prepare($sql);
+      $sql->bindValue(':nomeCidade', $data['nomeCidade']);
+      $sql->bindValue(':codEstado', $data['codEstado']);
+      $sql->execute();
+
+      return $this->db->lastInsertId();
+    } catch (\Throwable $th) {
+      $controller = new Controller();
+      $controller->returnJson(['mensagem' => 'Erro ao buscar cidade!', 'erro' => $th->errorInfo[2]], 500);
+      return false;
+    }
+  }
+
+  public function buscarPrestadorCidadeCadastrado ($codPrestador, $codCidade) {
+    try {
+      $sql = "SELECT * FROM prestadorcidade WHERE fk_Prestador_codPrestador = :codPrestador AND fk_Cidade_codCidade = :codCidade";
+
+      $sql = $this->db->prepare($sql);
+      $sql->bindValue(':codPrestador', $codPrestador);
+      $sql->bindValue(':codCidade', $codCidade);
+      $sql->execute();
+
+      return $sql->rowCount() > 0;
+    } catch (\Throwable $th) {
+      $controller = new Controller();
+      $controller->returnJson(['mensagem' => 'Erro ao buscar cidade!', 'erro' => $th->errorInfo[2]], 500);
+      return false;
+    }
+  }
+
+  public function cadastrarPrestadorCidade($codPrestador, $codCidade) {
+    try {
+      $sql = "INSERT INTO prestadorcidade (fk_Prestador_codPrestador, fk_Cidade_codCidade) VALUES (:codPrestador, :codCidade)";
+
+      $sql = $this->db->prepare($sql);
+      $sql->bindValue(':codPrestador', $codPrestador);
+      $sql->bindValue(':codCidade', $codCidade);
+      return $sql->execute();
+    } catch (\Throwable $th) {
+      $controller = new Controller();
+      $controller->returnJson(['mensagem' => 'Erro ao cadastrar prestadorcidade!', 'erro' => $th->errorInfo[2]], 500);
       return false;
     }
   }

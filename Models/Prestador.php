@@ -48,6 +48,20 @@ class Prestador extends Model
   }
   }
 
+  public function buscarPrestadorPorCodUsuario($codUsuario)
+  {
+    try {
+      $sql = "SELECT codPrestador FROM prestador WHERE fk_Usuario_codUsuario = :codUsuario";
+      $sql = $this->db->prepare($sql);
+      $sql->bindValue(':codUsuario', $codUsuario);
+      $sql->execute();
+      return $sql->fetch(\PDO::FETCH_ASSOC);
+    } catch (\PDOException $e) {
+      $controller = new Controller();
+      $controller->returnJson(['mensagem' => 'Erro ao buscar prestadores!', 'erro' => $e->errorInfo[2]], 500);
+      return false;
+    }
+  }
   public function buscarTudo()
   {
     try {

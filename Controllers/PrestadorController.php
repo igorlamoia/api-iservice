@@ -5,6 +5,7 @@ namespace Controllers;
 use Core\Controller;
 use Models\Especialidade;
 use Models\Prestador;
+use Providers\Endereco as EnderecoProvider;
 
 // Quero buscar informações do usuário no banco pelo cpf
 class PrestadorController extends Controller {
@@ -30,21 +31,29 @@ class PrestadorController extends Controller {
     $requisicao = $this->getRequestData();
 
     $prestadorModel = new Prestador();
+    $prestadorCadastrado = $prestadorModel->buscarPrestadorPorCodUsuario($requisicao['codUsuario']);
+    if($prestadorCadastrado) return $this->returnJson(['mensagem' => 'Prestador já cadastrado!'], 400);
+
     $codPrestador = $prestadorModel->cadastrarPrestador($requisicao);
     if(!$codPrestador) $this->returnJson(['mensagem' => 'Erro ao cadastrar prestador!'], 500);
 
     $especialidadeModel = new Especialidade();
     foreach($requisicao['especialidades'] as $especialidade) {
-      $codEspecialidade = $especialidadeModel->verificaSeExiste($especialidade);
+      $codEspecialidade = $especialidadeModel->buscarCodEspecialidade($especialidade);
 
       if(!$codEspecialidade) {
         $codEspecialidade = $especialidadeModel->cadastrar($especialidade);
         if(!$codEspecialidade) $this->returnJson(['mensagem' => 'Erro ao cadastrar especialidade!'], 500);
       }
-
-      $especialidadeModel->cadastrarPrestadorEspecialidade($codPrestador, $codEspecialidade);
+      $EspecialidadeCadastrada = $especialidadeModel->buscarPrestadorEspecialidade($codPrestador, $codEspecialidade);
+      if(!$EspecialidadeCadastrada) {
+        $especialidadeModel->cadastrarPrestadorEspecialidade($codPrestador, $codEspecialidade);
+      }
     }
 
+    foreach ($requisicao['cidadesAtendimento'] as $cidade) {
+      EnderecoProvider::buscarOuCadastrarCidade($codPrestador, $cidade);
+    }
 
     $this->returnJson([
       'mensagem' => 'Prestador cadastrado com sucesso!'

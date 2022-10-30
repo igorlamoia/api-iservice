@@ -22,13 +22,15 @@ class Especialidade extends Model
       return $this->db->lastInsertId();
     } catch (\PDOException $e) {
       $controller = new Controller();
-      $controller->returnJson(['mensagem' => 'Erro ao cadastrar endereço!',
-      'erro' => $e->errorInfo[2],
-      'local' => 'Models/Endereco/cadastrar'], 500);
+      $controller->returnJson([
+        'mensagem' => 'Erro ao cadastrar endereço!',
+        'erro' => $e->errorInfo[2],
+        'local' => 'Models/Endereco/cadastrar'
+      ], 500);
       return false;
     }
   }
-  public function verificaSeExiste($data)
+  public function buscarCodEspecialidade($data)
   {
     try {
 
@@ -39,22 +41,25 @@ class Especialidade extends Model
       $sql->bindValue(':fk_Categoria_codCategoria', $data['codCategoria']);
       $sql->execute();
 
-      if($sql->rowCount() > 0) {
+      if ($sql->rowCount() > 0) {
         return $sql->fetch(\PDO::FETCH_ASSOC)['codEspecialidade'];
       } else {
         return false;
       }
     } catch (\PDOException $e) {
       $controller = new Controller();
-      $controller->returnJson(['mensagem' => 'Erro ao cadastrar endereço!',
-      'erro' => $e->errorInfo[2],
-      'local' => 'Models/Endereco/cadastrar'], 500);
+      $controller->returnJson([
+        'mensagem' => 'Erro ao cadastrar endereço!',
+        'erro' => $e->errorInfo[2],
+        'local' => 'Models/Endereco/cadastrar'
+      ], 500);
       return false;
     }
   }
 
 
-  public function cadastrarPrestadorEspecialidade($codPrestador, $codEspecialidade) {
+  public function cadastrarPrestadorEspecialidade($codPrestador, $codEspecialidade)
+  {
     try {
       $sql = "INSERT INTO prestadorespecialidade (fk_Especialidade_codEspecialidade, fk_Prestador_codPrestador) VALUES (:fk_Especialidade_codEspecialidade, :fk_Prestador_codPrestador)";
       $sql = $this->db->prepare($sql);
@@ -62,11 +67,28 @@ class Especialidade extends Model
       $sql->bindValue(':fk_Especialidade_codEspecialidade', $codEspecialidade);
       $sql->execute();
       return $this->db->lastInsertId();
-  } catch (\PDOException $th) {
+    } catch (\PDOException $th) {
       $controller = new Controller();
       $controller->returnJson(['mensagem' => 'Erro ao cadastrar usuario :(', 'erro' => $th->errorInfo[2]], 500);
       return false;
+    }
   }
+
+  public function buscarPrestadorEspecialidade($codPrestador, $codEspecialidade) {
+    try {
+      $sql = "SELECT * FROM prestadorespecialidade WHERE fk_Especialidade_codEspecialidade = :fk_Especialidade_codEspecialidade AND fk_Prestador_codPrestador = :fk_Prestador_codPrestador";
+      $sql = $this->db->prepare($sql);
+      $sql->bindValue(':fk_Especialidade_codEspecialidade', $codEspecialidade);
+      $sql->bindValue(':fk_Prestador_codPrestador',  $codPrestador);
+      $sql->execute();
+
+      return $sql->fetch(\PDO::FETCH_ASSOC);
+
+    } catch (\PDOException $th) {
+      $controller = new Controller();
+      $controller->returnJson(['mensagem' => 'Erro ao cadastrar usuario :(', 'erro' => $th->errorInfo[2]], 500);
+      return false;
+    }
   }
 
 }
