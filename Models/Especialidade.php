@@ -74,7 +74,8 @@ class Especialidade extends Model
     }
   }
 
-  public function buscarPrestadorEspecialidade($codPrestador, $codEspecialidade) {
+  public function buscarPrestadorEspecialidade($codPrestador, $codEspecialidade)
+  {
     try {
       $sql = "SELECT * FROM prestadorespecialidade WHERE fk_Especialidade_codEspecialidade = :fk_Especialidade_codEspecialidade AND fk_Prestador_codPrestador = :fk_Prestador_codPrestador";
       $sql = $this->db->prepare($sql);
@@ -83,7 +84,6 @@ class Especialidade extends Model
       $sql->execute();
 
       return $sql->fetch(\PDO::FETCH_ASSOC);
-
     } catch (\PDOException $th) {
       $controller = new Controller();
       $controller->returnJson(['mensagem' => 'Erro ao cadastrar usuario :(', 'erro' => $th->errorInfo[2]], 500);
@@ -91,4 +91,22 @@ class Especialidade extends Model
     }
   }
 
+
+  public function listarEspecialidadesPorParametro($servico)
+  {
+    try {
+      $sql = "SELECT e.codEspecialidade, e.nome as 'nomeEspecialidade', e.descricao, c.codCategoria, c.nome as 'nomeCategoria'
+        from especialidade e INNER JOIN categoria c ON c.codCategoria = e.fk_Categoria_codCategoria
+        WHERE e.nome like CONCAT('%',:servico,'%') OR e.descricao like CONCAT('%',:servico,'%')";
+
+      $sql = $this->db->prepare($sql);
+      $sql->bindValue(':servico', $servico);
+      $sql->execute();
+      return $sql->fetchAll(\PDO::FETCH_ASSOC);
+    } catch (\Throwable $th) {
+      $controller = new Controller();
+      $controller->returnJson(['mensagem' => 'Erro ao cadastrar prestadorcidade!', 'erro' => $th->errorInfo[2]], 500);
+      return false;
+    }
+  }
 }
