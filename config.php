@@ -29,10 +29,9 @@ try {
 
 } catch(PDOException $e) {
 	$array = array();
-	$array['codigo'] = '85';
   $array['mensagem'] = "Falha na requisicao no BD.";
+	http_response_code(400);
 	echo json_encode($array);
-	// http_response_code(400);
 
 	//echo "ERRO: ".$e->getMessage();
 	exit;

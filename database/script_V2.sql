@@ -315,14 +315,14 @@ insert into UsuarioEndereco (fk_Usuario_codUsuario, fk_Endereco_codEnd, booleanP
 insert into UsuarioEndereco (fk_Usuario_codUsuario, fk_Endereco_codEnd, booleanPrincipal, endNumero, endComplemento) values (0005, 0010, False, 165, 'Casa');
 
 /* Prestador */
-insert into Prestador (descricaoProfissional, horarioDisponivel, fk_Usuario_codUsuario) values ('Especialista na área há 7 dias.', '8:00 até 17:00', 0006);
-insert into Prestador (descricaoProfissional, horarioDisponivel, fk_Usuario_codUsuario) values ('Acordo tarde, trabalho pouco e cobro muito.', '10:00 até 16:00', 0007);
-insert into Prestador (descricaoProfissional, horarioDisponivel, fk_Usuario_codUsuario) values ('Pedreiro de obra pronta.', '9:00 até 20:00', 0008);
+insert into Prestador (descricaoProfissional, horarioDisponivel, fk_Usuario_codUsuario) values ('Especialista na área há 7 dias.', null, 0006);
+insert into Prestador (descricaoProfissional, horarioDisponivel, fk_Usuario_codUsuario) values ('Acordo tarde, trabalho pouco e cobro muito.', null, 0007);
+insert into Prestador (descricaoProfissional, horarioDisponivel, fk_Usuario_codUsuario) values ('Pedreiro de obra pronta.', null, 0008);
 
-/* Estado */
-insert into Estado (nome) values ('Minas Gerais');
-insert into Estado (nome) values ('Rio de Janeiro');
-insert into Estado (nome) values ('São Paulo');
+
+/* Insere todos os estados BRASILEIROS com código do IBGE */
+INSERT INTO estado (codEstado, nome) VALUES (11, "RO"), (12, "AC"), (13, "AM"), (14, "RR"), (15, "PA"), (16, "AP"), (17, "TO"), (21, "MA"), (22, "PI"), (23, "CE"), (24, "RN"), (25, "PB"), (26, "PE"), (27, "AL"), (28, "SE"), (29, "BA"), (31, "MG"), (32, "ES"), (33, "RJ"), (35, "SP"), (41, "PR"), (42, "SC"), (43, "RS"), (50, "MS"), (51, "MT"), (52, "GO"), (53, "DF");
+
 
 /* Cidade */
 insert into Cidade (nome, fk_Estado_codEstado) values ('Leopoldina', 31);
@@ -415,8 +415,6 @@ insert into UsuarioAvaliaAtendimento (fk_Usuario_codUsuario, fk_Atendimento_codA
 insert into UsuarioAvaliaAtendimento (fk_Usuario_codUsuario, fk_Atendimento_codAtendimento, data, texto, linkFoto, linkVideo, linkAudio) values (0002, 0004, '2022-06-08 08:25:20', 'Um ótimo prestador de serviço', null, null, null);
 insert into UsuarioAvaliaAtendimento (fk_Usuario_codUsuario, fk_Atendimento_codAtendimento, data, texto, linkFoto, linkVideo, linkAudio) values (0003, 0005, '2022-06-09 13:55:05', 'Um ótimo prestador de serviço', null, null, null);
 
-/* Insere todos os estados BRASILEIROS com código do IBGE */
-INSERT INTO estado (codEstado, nome) VALUES (11, "RO"), (12, "AC"), (13, "AM"), (14, "RR"), (15, "PA"), (16, "AP"), (17, "TO"), (21, "MA"), (22, "PI"), (23, "CE"), (24, "RN"), (25, "PB"), (26, "PE"), (27, "AL"), (28, "SE"), (29, "BA"), (31, "MG"), (32, "ES"), (33, "RJ"), (35, "SP"), (41, "PR"), (42, "SC"), (43, "RS"), (50, "MS"), (51, "MT"), (52, "GO"), (53, "DF");
 
 ALTER TABLE `prestador` CHANGE `horarioDisponivel` `horarioAtendimentoInicio` INT(5) NULL DEFAULT NULL;
 ALTER TABLE `prestador` ADD COLUMN `horarioAtendimentoFim` INT(5) NULL DEFAULT NULL;
