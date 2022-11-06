@@ -30,14 +30,15 @@ class Prestador extends Model
   public function cadastrarPrestador($data) {
     try {
       $sql = "INSERT INTO prestador
-          (descricaoProfissional, horarioAtendimentoInicio, horarioAtendimentoFim, fk_Usuario_codUsuario)
-      VALUES (:descricaoProfissional, :horarioAtendimentoInicio, :horarioAtendimentoFim, :fk_Usuario_codUsuario)";
+          (descricaoProfissional, horarioAtendimentoInicio, horarioAtendimentoFim, fk_Usuario_codUsuario, diasAtendimento)
+      VALUES (:descricaoProfissional, :horarioAtendimentoInicio, :horarioAtendimentoFim, :fk_Usuario_codUsuario, :diasAtendimento)";
 
       $sql = $this->db->prepare($sql);
       $sql->bindValue(':descricaoProfissional', $data['descricaoProfissional']);
       $sql->bindValue(':horarioAtendimentoInicio', $data['horarioAtendimentoInicio']);
       $sql->bindValue(':horarioAtendimentoFim', $data['horarioAtendimentoFim']);
       $sql->bindValue(':fk_Usuario_codUsuario', $data['codUsuario']);
+      $sql->bindValue(':diasAtendimento', $data['diasAtendimento']);
 
       $sql->execute();
       return $this->db->lastInsertId();

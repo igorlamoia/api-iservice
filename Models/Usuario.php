@@ -33,11 +33,29 @@ class Usuario extends Model
         }
     }
 
+    public function verificaUsuarioPrestador($data)
+    {
+
+        try {
+            $sql = "SELECT u.* FROM usuario u inner join prestador p on p.fk_Usuario_codUsuario = u.codUsuario WHERE u.idFirebase = :idFirebase ";
+
+            $sql = $this->db->prepare($sql);
+            $sql->bindValue(':idFirebase', $data['idFirebase']);
+
+            $sql->execute();
+
+            return $sql->fetch(\PDO::FETCH_ASSOC);
+        } catch (\Throwable $th) {
+            $controller = new Controller();
+            $controller->returnJson(['mensagem' => 'Erro ao verificar usuario!', 'erro' => $th->errorInfo[2]], 500);
+            return false;
+        }
+    }
     public function dadosUsuario($data)
     {
 
         try {
-            $sql = "SELECT * FROM usuario WHERE idFirebase = :idFirebase";
+            $sql = "SELECT u.* FROM usuario u WHERE idFirebase = :idFirebase";
 
             $sql = $this->db->prepare($sql);
             $sql->bindValue(':idFirebase', $data['idFirebase']);

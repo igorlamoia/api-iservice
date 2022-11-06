@@ -109,4 +109,49 @@ class Especialidade extends Model
       return false;
     }
   }
+
+  public function listarTodasCategorias()
+  {
+    try {
+      $sql = "SELECT * from categoria";
+
+      $sql = $this->db->prepare($sql);
+      $sql->execute();
+      return $sql->fetchAll(\PDO::FETCH_ASSOC);
+    } catch (\Throwable $th) {
+      $controller = new Controller();
+      $controller->returnJson(['mensagem' => 'Erro ao cadastrar prestadorcidade!', 'erro' => $th->errorInfo[2]], 500);
+      return false;
+    }
+  }
+
+  public function listarTodasProfissoes()
+  {
+    try {
+      $sql = "SELECT codEspecialidade, nome from especialidade GROUP BY nome";
+
+      $sql = $this->db->prepare($sql);
+      $sql->execute();
+      return $sql->fetchAll(\PDO::FETCH_ASSOC);
+    } catch (\Throwable $th) {
+      $controller = new Controller();
+      $controller->returnJson(['mensagem' => 'Erro ao cadastrar prestadorcidade!', 'erro' => $th->errorInfo[2]], 500);
+      return false;
+    }
+  }
+  public function listarTodasEspecialidades()
+  {
+    try {
+      $sql = "SELECT codEspecialidade, descricao as nome from especialidade GROUP BY descricao";
+
+      $sql = $this->db->prepare($sql);
+      $sql->execute();
+      return $sql->fetchAll(\PDO::FETCH_ASSOC);
+    } catch (\Throwable $th) {
+      $controller = new Controller();
+      $controller->returnJson(['mensagem' => 'Erro ao cadastrar prestadorcidade!', 'erro' => $th->errorInfo[2]], 500);
+      return false;
+    }
+  }
+
 }

@@ -420,3 +420,5 @@ INSERT INTO estado (codEstado, nome) VALUES (11, "RO"), (12, "AC"), (13, "AM"), 
 
 ALTER TABLE `prestador` CHANGE `horarioDisponivel` `horarioAtendimentoInicio` INT(5) NULL DEFAULT NULL;
 ALTER TABLE `prestador` ADD COLUMN `horarioAtendimentoFim` INT(5) NULL DEFAULT NULL;
+
+ALTER TABLE `prestador` ADD COLUMN `diasAtendimento` varchar(20) NULL;

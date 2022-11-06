@@ -71,8 +71,11 @@ class UsuarioController extends Controller
 
 
         if ($requisitante) {
+
             $array['mensagem'] = 'Dados do requisitante listados com sucesso!';
             $array['payload'] = $requisitante;
+            if($usuarioModel->verificaUsuarioPrestador($requisicao)) $array['payload']['prestador'] = true;
+
             return $this->returnJson($array, 200);
         }
         $array['payload'] = 'Usuario não encontrado!';

@@ -29,7 +29,6 @@ class PrestadorController extends Controller {
 
   public function cadastrarPrestador() {
     $requisicao = $this->getRequestData();
-
     $prestadorModel = new Prestador();
     $prestadorCadastrado = $prestadorModel->buscarPrestadorPorCodUsuario($requisicao['codUsuario']);
     if($prestadorCadastrado) return $this->returnJson(['mensagem' => 'Prestador já cadastrado!'], 400);

@@ -26,5 +26,23 @@ class ServicoController extends Controller {
     }
     $this->returnJson($arrayResposta, 200);
   }
+  public function listarTodasCategorias() {
+    $especialidade = new Especialidade();
+    if($categorias = $especialidade->listarTodasCategorias()) return $this->returnJson(['payload' => $categorias], 200);
+
+    $this->returnJson(['mensagem' => 'Falha ao listar categorias!'], 500);
+  }
+  public function listarTodasProfissoes() {
+    $especialidade = new Especialidade();
+    if($categorias = $especialidade->listarTodasProfissoes()) return $this->returnJson(['payload' => $categorias], 200);
+
+    $this->returnJson(['mensagem' => 'Falha ao listar profissões!'], 500);
+  }
+  public function listarTodasEspecialidades() {
+    $especialidade = new Especialidade();
+    if($categorias = $especialidade->listarTodasEspecialidades()) return $this->returnJson(['payload' => $categorias], 200);
+
+    $this->returnJson(['mensagem' => 'Falha ao listar especialidades!'], 500);
+  }
 
 }
