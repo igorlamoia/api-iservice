@@ -80,6 +80,7 @@ class PrestadorController extends Controller {
         'linkFoto' => $prestador['linkFoto'],
         'idFirebase' => $prestador['idFirebase'],
         'dataNascimento' => $prestador['dataNascimento'],
+        'diasAtendimento' => $prestador['diasAtendimento'],
       ];
       $cidades = $enderecoModel->buscarTodasCidadesPorCodPrestador($prestador['codPrestador']);
       if($cidades) {
