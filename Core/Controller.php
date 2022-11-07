@@ -20,7 +20,7 @@ class Controller
 
 			case 'PUT':
 
-				$data = json_decode(file_get_contents('php://input'));
+				$data = json_decode(file_get_contents('php://input'), 1);
 				if (is_null($data)) {
 					$data = $_POST;
 				}
@@ -34,7 +34,7 @@ class Controller
 				break;
 			case 'POST':
 
-				$data = json_decode(file_get_contents('php://input'));
+				$data = json_decode(file_get_contents('php://input'), true);
 				if (is_null($data)) {
 					$data = $_POST;
 				}
