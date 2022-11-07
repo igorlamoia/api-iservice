@@ -154,4 +154,23 @@ class Especialidade extends Model
     }
   }
 
+  public function buscarEspecialidadesPorCodPrestador($codPrestador)
+  {
+    try {
+      $sql = "SELECT e.codEspecialidade, e.nome, e.descricao, c.codCategoria, c.nome as nomeCategoria
+              FROM especialidade e INNER JOIN categoria c ON c.codCategoria = e.fk_Categoria_codCategoria
+              WHERE e.codEspecialidade IN (SELECT pe.fk_Especialidade_codEspecialidade
+              FROM prestadorespecialidade pe where pe.fk_Prestador_codPrestador = :codPrestador)";
+
+      $sql = $this->db->prepare($sql);
+      $sql->bindValue(':codPrestador', $codPrestador);
+      $sql->execute();
+      return $sql->fetchAll(\PDO::FETCH_ASSOC);
+    } catch (\Throwable $th) {
+      $controller = new Controller();
+      $controller->returnJson(['mensagem' => 'Erro ao cadastrar prestadorcidade!', 'erro' => $th->errorInfo[2]], 500);
+      return false;
+    }
+  }
+
 }

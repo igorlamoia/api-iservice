@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use Core\Controller;
+use Models\Endereco;
 use Models\Especialidade;
 use Models\Prestador;
 use Providers\Endereco as EnderecoProvider;
@@ -61,13 +62,44 @@ class PrestadorController extends Controller {
 
   public function buscarTodosOsPrestadores () {
     $prestadorModel = new Prestador();
-    $prestadores = $prestadorModel->buscarTudo();
-
+    $prestadores = $prestadorModel->informacoesPrestadores();
+    $enderecoModel = new Endereco();
+    $especialidadeModel = new Especialidade();
+    $payload['payload']['prestadores'] = [];
+    foreach ($prestadores as $prestador) {
+      $prestadorDados = [
+        'codPrestador' => $prestador['codPrestador'],
+        'descricaoProfissional' => $prestador['descricaoProfissional'],
+        'horarioAtendimentoInicio' => $prestador['horarioAtendimentoInicio'],
+        'horarioAtendimentoFim' => $prestador['horarioAtendimentoFim'],
+        'nome' => $prestador['nome'],
+        'cpf' => $prestador['cpf'],
+        'numTelefone' => $prestador['numTelefone'],
+        'email' => $prestador['email'],
+        'codUsuario' => $prestador['codUsuario'],
+        'linkFoto' => $prestador['linkFoto'],
+        'idFirebase' => $prestador['idFirebase'],
+        'dataNascimento' => $prestador['dataNascimento'],
+      ];
+      $cidades = $enderecoModel->buscarTodasCidadesPorCodPrestador($prestador['codPrestador']);
+      if($cidades) {
+        $prestadorDados['cidadesAtendimento'] = $cidades;
+      } else {
+        $prestadorDados['cidadesAtendimento'] = [];
+      }
+      $especialidades = $especialidadeModel->buscarEspecialidadesPorCodPrestador($prestador['codPrestador']);
+      if($especialidades) {
+        $prestadorDados['especialidades'] = $especialidades;
+      } else {
+        $prestadorDados['especialidades'] = [];
+      }
+      $payload['payload']['prestadores'][] = $prestadorDados;
+    }
+    // $especialidade = new Especialidade();
+    // $especialidades = $especialidade->buscarEspecialidadesPrestadpr();
     if($prestadores) {
-      $this->returnJson([
-        'mensagem' => 'Prestadores encontrados com sucesso!',
-        'prestadores' => $prestadores
-      ], 200);
+      $payload['mensagem'] = 'Prestadores listados com sucesso!';
+      $this->returnJson($payload, 200);
     } else {
       $this->returnJson(['mensagem' => 'Nenhum prestador encontrado!'], 404);
     }

@@ -27,7 +27,8 @@ class Prestador extends Model
   }
 
 
-  public function cadastrarPrestador($data) {
+  public function cadastrarPrestador($data)
+  {
     try {
       $sql = "INSERT INTO prestador
           (descricaoProfissional, horarioAtendimentoInicio, horarioAtendimentoFim, fk_Usuario_codUsuario, diasAtendimento)
@@ -42,11 +43,11 @@ class Prestador extends Model
 
       $sql->execute();
       return $this->db->lastInsertId();
-  } catch (\PDOException $th) {
+    } catch (\PDOException $th) {
       $controller = new Controller();
       $controller->returnJson(['mensagem' => 'Erro ao cadastrar usuario :(', 'erro' => $th->errorInfo[2]], 500);
       return false;
-  }
+    }
   }
 
   public function buscarPrestadorPorCodUsuario($codUsuario)
@@ -63,10 +64,12 @@ class Prestador extends Model
       return false;
     }
   }
-  public function buscarTudo()
+  public function informacoesPrestadores()
   {
     try {
-      $sql = "SELECT * FROM prestador";
+      $sql = "SELECT * FROM prestador p
+      INNER JOIN usuario u ON u.codUsuario = p.fk_Usuario_codUsuario
+      ORDER BY p.codPrestador DESC LIMIT 5";
       $sql = $this->db->prepare($sql);
       $sql->execute();
       return $sql->fetchAll(\PDO::FETCH_ASSOC);

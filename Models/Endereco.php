@@ -19,7 +19,7 @@ class Endereco extends Model
       $sql->execute();
       $resultado = $sql->fetch(\PDO::FETCH_ASSOC);
 
-      if($resultado) return $resultado['codEnd'];
+      if ($resultado) return $resultado['codEnd'];
 
       return false;
     } catch (\Throwable $th) {
@@ -45,9 +45,11 @@ class Endereco extends Model
       return $this->db->lastInsertId();
     } catch (\PDOException $e) {
       $controller = new Controller();
-      $controller->returnJson(['mensagem' => 'Erro ao cadastrar endereço!',
-      'erro' => $e->errorInfo[2],
-      'local' => 'Models/Endereco/cadastrar'], 500);
+      $controller->returnJson([
+        'mensagem' => 'Erro ao cadastrar endereço!',
+        'erro' => $e->errorInfo[2],
+        'local' => 'Models/Endereco/cadastrar'
+      ], 500);
       return false;
     }
   }
@@ -67,7 +69,6 @@ class Endereco extends Model
       $sql->bindValue(':endComplemento', $data['endComplemento']);
 
       return $sql->execute();
-
     } catch (\PDOException $e) {
       $controller = new Controller();
       $controller->returnJson(['mensagem' => 'Erro ao cadastrar endereço!', 'erro' => $e, 'local' => 'Models/Endereco/cadastrarEnderecoUsuario'], 500);
@@ -75,7 +76,8 @@ class Endereco extends Model
     }
   }
 
-  public function buscarEnderecosUsuario($codUsuario) {
+  public function buscarEnderecosUsuario($codUsuario)
+  {
     try {
       $sql = "SELECT * FROM endereco
               INNER JOIN usuarioendereco
@@ -94,7 +96,8 @@ class Endereco extends Model
     }
   }
 
-  public function buscarCodCidade ($data) {
+  public function buscarCodCidade($data)
+  {
     try {
       $sql = "SELECT codCidade FROM cidade c INNER JOIN estado e ON c.fk_Estado_codEstado = e.codEstado
         WHERE c.nome = :nomeCidade AND c.fk_Estado_codEstado = :codEstado";
@@ -103,7 +106,7 @@ class Endereco extends Model
       $sql->bindValue(':nomeCidade', $data['nomeCidade']);
       $sql->bindValue(':codEstado', $data['codEstado']);
       $sql->execute();
-      if($sql->rowCount() > 0) {
+      if ($sql->rowCount() > 0) {
         return $sql->fetch(\PDO::FETCH_ASSOC)['codCidade'];
       }
       return false;
@@ -114,7 +117,8 @@ class Endereco extends Model
     }
   }
 
-  public function buscarCidade ($data) {
+  public function buscarCidade($data)
+  {
     try {
       $sql = "SELECT codCidade, codEstado, c.nome as 'nomeCidade', e.nome as 'UF'
         FROM cidade c INNER JOIN estado e ON c.fk_Estado_codEstado = e.codEstado
@@ -135,7 +139,8 @@ class Endereco extends Model
     }
   }
 
-  public function cadastrarCidade ($data) {
+  public function cadastrarCidade($data)
+  {
     try {
       $sql = "INSERT INTO cidade (nome, fk_Estado_codEstado) VALUES (:nomeCidade, :codEstado)";
 
@@ -152,7 +157,8 @@ class Endereco extends Model
     }
   }
 
-  public function buscarPrestadorCidadeCadastrado ($codPrestador, $codCidade) {
+  public function buscarPrestadorCidadeCadastrado($codPrestador, $codCidade)
+  {
     try {
       $sql = "SELECT * FROM prestadorcidade WHERE fk_Prestador_codPrestador = :codPrestador AND fk_Cidade_codCidade = :codCidade";
 
@@ -169,7 +175,8 @@ class Endereco extends Model
     }
   }
 
-  public function cadastrarPrestadorCidade($codPrestador, $codCidade) {
+  public function cadastrarPrestadorCidade($codPrestador, $codCidade)
+  {
     try {
       $sql = "INSERT INTO prestadorcidade (fk_Prestador_codPrestador, fk_Cidade_codCidade) VALUES (:codPrestador, :codCidade)";
 
@@ -184,4 +191,22 @@ class Endereco extends Model
     }
   }
 
+  public function buscarTodasCidadesPorCodPrestador($codPrestador)
+  {
+    try {
+      $sql = "SELECT * FROM cidade c WHERE c.codCidade IN
+             (SELECT pc.fk_Cidade_codCidade FROM prestadorcidade pc
+              WHERE pc.fk_Prestador_codPrestador = :codPrestador)";
+
+      $sql = $this->db->prepare($sql);
+      $sql->bindValue(':codPrestador', $codPrestador);
+      $sql->execute();
+
+      return $sql->fetchAll(\PDO::FETCH_ASSOC);
+    } catch (\Throwable $th) {
+      $controller = new Controller();
+      $controller->returnJson(['mensagem' => 'Erro ao buscar cidades do prestador!', 'erro' => $th->errorInfo[2]], 500);
+      return false;
+    }
+  }
 }
