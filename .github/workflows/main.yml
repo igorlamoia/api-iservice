@@ -14,9 +14,9 @@ jobs:
     - name: 📂 Sync files - Sincronizando arquivos
       uses: SamKirkland/FTP-Deploy-Action@4.3.2
       with:
-        server: ${{ secrets.FTP_HOST }}
-        username: ${{ secrets.FTP_USER }}
-        password: ${{ secrets.FTP_USER_PASSWORD }}
+        server: ${{ FTP_HOST.FTP_HOST }}
+        username: ${{ FTP_HOST.FTP_USER }}
+        password: ${{ FTP_HOST.FTP_USER_PASSWORD }}
         exclude: |
           **/.git*
           **/.git*/*
