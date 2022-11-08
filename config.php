@@ -1,4 +1,3 @@
-
 <?php
 require 'environment.php';
 
@@ -13,10 +12,10 @@ if(ENVIRONMENT == 'development') {
 }
 
 if(ENVIRONMENT == 'production') {
-	$config['dbname'] = 'proje500_engcomp_servicos20221';
-	$config['host'] = '108.179.253.195';
-	$config['dbuser'] = 'proje500_fsiquei';
-	$config['dbpass'] = 'P}uixQ1,VLco';
+	$config['dbname'] = DBNAME;
+	$config['host'] = HOST;
+	$config['dbuser'] = DBUSER;
+	$config['dbpass'] = DBPASS;
 }
 
 global $db;
