@@ -12,7 +12,7 @@ jobs:
     - name: 🚚 Get latest code - Pegando último código
       uses: actions/checkout@v2
     - name: 📂 Sync files - Sincronizando arquivos
-      uses: SamKirkland/FTP-Deploy-Action@4.3.1
+      uses: SamKirkland/FTP-Deploy-Action@4.3.2
       with:
         server: ${{ secrets.ftp_host }}
         username: ${{ secrets.ftp_user }}
