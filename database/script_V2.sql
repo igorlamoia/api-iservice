@@ -321,7 +321,7 @@ insert into Prestador (descricaoProfissional, horarioDisponivel, fk_Usuario_codU
 
 
 /* Insere todos os estados BRASILEIROS com código do IBGE */
-INSERT INTO estado (codEstado, nome) VALUES (11, "RO"), (12, "AC"), (13, "AM"), (14, "RR"), (15, "PA"), (16, "AP"), (17, "TO"), (21, "MA"), (22, "PI"), (23, "CE"), (24, "RN"), (25, "PB"), (26, "PE"), (27, "AL"), (28, "SE"), (29, "BA"), (31, "MG"), (32, "ES"), (33, "RJ"), (35, "SP"), (41, "PR"), (42, "SC"), (43, "RS"), (50, "MS"), (51, "MT"), (52, "GO"), (53, "DF");
+INSERT INTO Estado (codEstado, nome) VALUES (11, "RO"), (12, "AC"), (13, "AM"), (14, "RR"), (15, "PA"), (16, "AP"), (17, "TO"), (21, "MA"), (22, "PI"), (23, "CE"), (24, "RN"), (25, "PB"), (26, "PE"), (27, "AL"), (28, "SE"), (29, "BA"), (31, "MG"), (32, "ES"), (33, "RJ"), (35, "SP"), (41, "PR"), (42, "SC"), (43, "RS"), (50, "MS"), (51, "MT"), (52, "GO"), (53, "DF");
 
 
 /* Cidade */
@@ -416,7 +416,7 @@ insert into UsuarioAvaliaAtendimento (fk_Usuario_codUsuario, fk_Atendimento_codA
 insert into UsuarioAvaliaAtendimento (fk_Usuario_codUsuario, fk_Atendimento_codAtendimento, data, texto, linkFoto, linkVideo, linkAudio) values (0003, 0005, '2022-06-09 13:55:05', 'Um ótimo prestador de serviço', null, null, null);
 
 
-ALTER TABLE `prestador` CHANGE `horarioDisponivel` `horarioAtendimentoInicio` INT(5) NULL DEFAULT NULL;
-ALTER TABLE `prestador` ADD COLUMN `horarioAtendimentoFim` INT(5) NULL DEFAULT NULL;
+ALTER TABLE `Prestador` CHANGE `horarioDisponivel` `horarioAtendimentoInicio` INT(5) NULL DEFAULT NULL;
+ALTER TABLE `Prestador` ADD COLUMN `horarioAtendimentoFim` INT(5) NULL DEFAULT NULL;
 
-ALTER TABLE `prestador` ADD COLUMN `diasAtendimento` varchar(20) NULL;
+ALTER TABLE `Prestador` ADD COLUMN `diasAtendimento` varchar(20) NULL;
