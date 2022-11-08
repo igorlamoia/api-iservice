@@ -17,7 +17,11 @@ jobs:
         server: ${{ secrets.ftp_host }}
         username: ${{ secrets.ftp_user }}
         password: ${{ secrets.ftp_user_password }}
-        exclude: |
+        exclude: |  
+          .git/**
+          .git**
+          .git*/**
           **/.git*
-          **/.git*/*
+          **/.git*/**
           **/.environment*
+          **/node_modules/**
