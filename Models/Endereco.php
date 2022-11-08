@@ -195,7 +195,7 @@ class Endereco extends Model
   {
     try {
       $sql = "SELECT * FROM Cidade c WHERE c.codCidade IN
-             (SELECT pc.fk_Cidade_codCidade FROM prestadorcidade pc
+             (SELECT pc.fk_Cidade_codCidade FROM PrestadorCidade pc
               WHERE pc.fk_Prestador_codPrestador = :codPrestador)";
 
       $sql = $this->db->prepare($sql);
