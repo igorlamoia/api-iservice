@@ -12,7 +12,7 @@ class Endereco extends Model
   {
 
     try {
-      $sql = "SELECT codEnd FROM endereco WHERE cep = :cep;";
+      $sql = "SELECT codEnd FROM Endereco WHERE cep = :cep;";
 
       $sql = $this->db->prepare($sql);
       $sql->bindValue(':cep', $data['cep']);
@@ -33,7 +33,7 @@ class Endereco extends Model
   {
     try {
 
-      $sql = "INSERT INTO endereco (rua, bairro, cep, cidade, estado) VALUES (:rua, :bairro, :cep, :cidade, :estado)";
+      $sql = "INSERT INTO Endereco (rua, bairro, cep, cidade, estado) VALUES (:rua, :bairro, :cep, :cidade, :estado)";
       $sql = $this->db->prepare($sql);
       $sql->bindValue(':rua', $data['rua']);
       $sql->bindValue(':bairro', $data['bairro']);
@@ -58,7 +58,7 @@ class Endereco extends Model
   {
     try {
 
-      $sql = "INSERT INTO usuarioendereco
+      $sql = "INSERT INTO UsuarioEndereco
       (fk_Endereco_codEnd, fk_Usuario_codUsuario, endNumero, endComplemento)
         VALUES (:fk_Endereco_codEnd, :fk_Usuario_codUsuario, :endNumero, :endComplemento)";
 
@@ -79,7 +79,7 @@ class Endereco extends Model
   public function buscarEnderecosUsuario($codUsuario)
   {
     try {
-      $sql = "SELECT * FROM endereco
+      $sql = "SELECT * FROM Endereco
               INNER JOIN usuarioendereco
               ON usuarioendereco.fk_Endereco_codEnd = endereco.codEnd
               WHERE usuarioendereco.fk_Usuario_codUsuario = :codUsuario";
@@ -99,7 +99,7 @@ class Endereco extends Model
   public function buscarCodCidade($data)
   {
     try {
-      $sql = "SELECT codCidade FROM cidade c INNER JOIN estado e ON c.fk_Estado_codEstado = e.codEstado
+      $sql = "SELECT codCidade FROM Cidade c INNER JOIN Estado e ON c.fk_Estado_codEstado = e.codEstado
         WHERE c.nome = :nomeCidade AND c.fk_Estado_codEstado = :codEstado";
 
       $sql = $this->db->prepare($sql);
@@ -121,7 +121,7 @@ class Endereco extends Model
   {
     try {
       $sql = "SELECT codCidade, codEstado, c.nome as 'nomeCidade', e.nome as 'UF'
-        FROM cidade c INNER JOIN estado e ON c.fk_Estado_codEstado = e.codEstado
+        FROM Cidade c INNER JOIN Estado e ON c.fk_Estado_codEstado = e.codEstado
         WHERE c.nome = :nomeCidade AND c.fk_Estado_codEstado = :codEstado";
 
       $sql = $this->db->prepare($sql);
@@ -142,7 +142,7 @@ class Endereco extends Model
   public function cadastrarCidade($data)
   {
     try {
-      $sql = "INSERT INTO cidade (nome, fk_Estado_codEstado) VALUES (:nomeCidade, :codEstado)";
+      $sql = "INSERT INTO Cidade (nome, fk_Estado_codEstado) VALUES (:nomeCidade, :codEstado)";
 
       $sql = $this->db->prepare($sql);
       $sql->bindValue(':nomeCidade', $data['nomeCidade']);
@@ -160,7 +160,7 @@ class Endereco extends Model
   public function buscarPrestadorCidadeCadastrado($codPrestador, $codCidade)
   {
     try {
-      $sql = "SELECT * FROM prestadorcidade WHERE fk_Prestador_codPrestador = :codPrestador AND fk_Cidade_codCidade = :codCidade";
+      $sql = "SELECT * FROM PrestadorCidade WHERE fk_Prestador_codPrestador = :codPrestador AND fk_Cidade_codCidade = :codCidade";
 
       $sql = $this->db->prepare($sql);
       $sql->bindValue(':codPrestador', $codPrestador);
@@ -178,7 +178,7 @@ class Endereco extends Model
   public function cadastrarPrestadorCidade($codPrestador, $codCidade)
   {
     try {
-      $sql = "INSERT INTO prestadorcidade (fk_Prestador_codPrestador, fk_Cidade_codCidade) VALUES (:codPrestador, :codCidade)";
+      $sql = "INSERT INTO PrestadorCidade (fk_Prestador_codPrestador, fk_Cidade_codCidade) VALUES (:codPrestador, :codCidade)";
 
       $sql = $this->db->prepare($sql);
       $sql->bindValue(':codPrestador', $codPrestador);
@@ -194,7 +194,7 @@ class Endereco extends Model
   public function buscarTodasCidadesPorCodPrestador($codPrestador)
   {
     try {
-      $sql = "SELECT * FROM cidade c WHERE c.codCidade IN
+      $sql = "SELECT * FROM Cidade c WHERE c.codCidade IN
              (SELECT pc.fk_Cidade_codCidade FROM prestadorcidade pc
               WHERE pc.fk_Prestador_codPrestador = :codPrestador)";
 

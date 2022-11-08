@@ -5,19 +5,18 @@ require 'environment.php';
 global $config;
 $config = array();
 
-$config['dbname'] = 'iservice';
-$config['host'] = 'localhost';
-$config['dbuser'] = 'root';
-$config['dbpass'] = '';
 if(ENVIRONMENT == 'development') {
-
 	$config['dbname'] = 'iservice';
 	$config['host'] = 'localhost';
 	$config['dbuser'] = 'root';
 	$config['dbpass'] = '';
+}
 
-	// $config['jwt_secret_key'] = "abC123!";
-
+if(ENVIRONMENT == 'production') {
+	$config['dbname'] = 'proje500_engcomp_servicos20221';
+	$config['host'] = '108.179.253.195';
+	$config['dbuser'] = 'proje500_fsiquei';
+	$config['dbpass'] = 'P}uixQ1,VLco';
 }
 
 global $db;
@@ -32,7 +31,5 @@ try {
   $array['mensagem'] = "Falha na requisicao no BD.";
 	http_response_code(400);
 	echo json_encode($array);
-
-	//echo "ERRO: ".$e->getMessage();
 	exit;
 }

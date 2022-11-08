@@ -14,7 +14,7 @@ class Prestador extends Model
 
     try {
 
-      $sql = "SELECT * FROM prestador WHERE cpf = :cpf";
+      $sql = "SELECT * FROM Prestador WHERE cpf = :cpf";
       $sql = $this->db->prepare($sql);
       $sql->bindValue(':cpf', $cpf);
       $sql->execute();
@@ -30,7 +30,7 @@ class Prestador extends Model
   public function cadastrarPrestador($data)
   {
     try {
-      $sql = "INSERT INTO prestador
+      $sql = "INSERT INTO Prestador
           (descricaoProfissional, horarioAtendimentoInicio, horarioAtendimentoFim, fk_Usuario_codUsuario, diasAtendimento)
       VALUES (:descricaoProfissional, :horarioAtendimentoInicio, :horarioAtendimentoFim, :fk_Usuario_codUsuario, :diasAtendimento)";
 
@@ -53,7 +53,7 @@ class Prestador extends Model
   public function buscarPrestadorPorCodUsuario($codUsuario)
   {
     try {
-      $sql = "SELECT codPrestador FROM prestador WHERE fk_Usuario_codUsuario = :codUsuario";
+      $sql = "SELECT codPrestador FROM Prestador WHERE fk_Usuario_codUsuario = :codUsuario";
       $sql = $this->db->prepare($sql);
       $sql->bindValue(':codUsuario', $codUsuario);
       $sql->execute();
@@ -67,8 +67,8 @@ class Prestador extends Model
   public function informacoesPrestadores()
   {
     try {
-      $sql = "SELECT * FROM prestador p
-      INNER JOIN usuario u ON u.codUsuario = p.fk_Usuario_codUsuario
+      $sql = "SELECT * FROM Prestador p
+      INNER JOIN Usuario u ON u.codUsuario = p.fk_Usuario_codUsuario
       ORDER BY p.codPrestador DESC LIMIT 5";
       $sql = $this->db->prepare($sql);
       $sql->execute();

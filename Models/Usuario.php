@@ -11,7 +11,7 @@ class Usuario extends Model
     {
 
         try {
-            $sql = "INSERT INTO usuario
+            $sql = "INSERT INTO Usuario
                 (nome, cpf, email, numTelefone, idFirebase, dataNascimento, linkFoto)
             VALUES (:nome, :cpf, :email, :numTelefone, :idFirebase, :dataNascimento, :linkFoto)";
 
@@ -37,7 +37,7 @@ class Usuario extends Model
     {
 
         try {
-            $sql = "SELECT u.* FROM usuario u inner join prestador p on p.fk_Usuario_codUsuario = u.codUsuario WHERE u.idFirebase = :idFirebase ";
+            $sql = "SELECT u.* FROM Usuario u inner join Prestador p on p.fk_Usuario_codUsuario = u.codUsuario WHERE u.idFirebase = :idFirebase ";
 
             $sql = $this->db->prepare($sql);
             $sql->bindValue(':idFirebase', $data['idFirebase']);
@@ -55,7 +55,7 @@ class Usuario extends Model
     {
 
         try {
-            $sql = "SELECT u.* FROM usuario u WHERE idFirebase = :idFirebase";
+            $sql = "SELECT u.* FROM Usuario u WHERE idFirebase = :idFirebase";
 
             $sql = $this->db->prepare($sql);
             $sql->bindValue(':idFirebase', $data['idFirebase']);
@@ -73,7 +73,7 @@ class Usuario extends Model
     public function verificaUsuarioExistente($data)
     {
         try {
-            $sql = "SELECT * FROM usuario WHERE cpf = :cpf OR email = :email";
+            $sql = "SELECT * FROM Usuario WHERE cpf = :cpf OR email = :email";
 
             $sql = $this->db->prepare($sql);
             $sql->bindValue(':cpf', $data['cpf']);

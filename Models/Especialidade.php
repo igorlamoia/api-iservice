@@ -12,7 +12,7 @@ class Especialidade extends Model
   {
     try {
 
-      $sql = "INSERT INTO especialidade (nome, descricao, fk_Categoria_codCategoria) VALUES (:nome, :descricao, :fk_Categoria_codCategoria)";
+      $sql = "INSERT INTO Especialidade (nome, descricao, fk_Categoria_codCategoria) VALUES (:nome, :descricao, :fk_Categoria_codCategoria)";
       $sql = $this->db->prepare($sql);
       $sql->bindValue(':nome', $data['nome']);
       $sql->bindValue(':descricao', $data['descricao']);
@@ -34,7 +34,7 @@ class Especialidade extends Model
   {
     try {
 
-      $sql = "SELECT codEspecialidade from especialidade WHERE nome = :nome AND descricao  = :descricao AND fk_Categoria_codCategoria = :fk_Categoria_codCategoria";
+      $sql = "SELECT codEspecialidade from Especialidade WHERE nome = :nome AND descricao  = :descricao AND fk_Categoria_codCategoria = :fk_Categoria_codCategoria";
       $sql = $this->db->prepare($sql);
       $sql->bindValue(':nome', $data['nome']);
       $sql->bindValue(':descricao', $data['descricao']);
@@ -61,7 +61,7 @@ class Especialidade extends Model
   public function cadastrarPrestadorEspecialidade($codPrestador, $codEspecialidade)
   {
     try {
-      $sql = "INSERT INTO prestadorespecialidade (fk_Especialidade_codEspecialidade, fk_Prestador_codPrestador) VALUES (:fk_Especialidade_codEspecialidade, :fk_Prestador_codPrestador)";
+      $sql = "INSERT INTO PrestadorEspecialidade (fk_Especialidade_codEspecialidade, fk_Prestador_codPrestador) VALUES (:fk_Especialidade_codEspecialidade, :fk_Prestador_codPrestador)";
       $sql = $this->db->prepare($sql);
       $sql->bindValue(':fk_Prestador_codPrestador',  $codPrestador);
       $sql->bindValue(':fk_Especialidade_codEspecialidade', $codEspecialidade);
@@ -77,7 +77,7 @@ class Especialidade extends Model
   public function buscarPrestadorEspecialidade($codPrestador, $codEspecialidade)
   {
     try {
-      $sql = "SELECT * FROM prestadorespecialidade WHERE fk_Especialidade_codEspecialidade = :fk_Especialidade_codEspecialidade AND fk_Prestador_codPrestador = :fk_Prestador_codPrestador";
+      $sql = "SELECT * FROM PrestadorEspecialidade WHERE fk_Especialidade_codEspecialidade = :fk_Especialidade_codEspecialidade AND fk_Prestador_codPrestador = :fk_Prestador_codPrestador";
       $sql = $this->db->prepare($sql);
       $sql->bindValue(':fk_Especialidade_codEspecialidade', $codEspecialidade);
       $sql->bindValue(':fk_Prestador_codPrestador',  $codPrestador);
@@ -96,7 +96,7 @@ class Especialidade extends Model
   {
     try {
       $sql = "SELECT e.codEspecialidade, e.nome as 'nomeEspecialidade', e.descricao, c.codCategoria, c.nome as 'nomeCategoria'
-        from especialidade e INNER JOIN categoria c ON c.codCategoria = e.fk_Categoria_codCategoria
+        from Especialidade e INNER JOIN Categoria c ON c.codCategoria = e.fk_Categoria_codCategoria
         WHERE e.nome like CONCAT('%',:servico,'%') OR e.descricao like CONCAT('%',:servico,'%')";
 
       $sql = $this->db->prepare($sql);
@@ -113,7 +113,7 @@ class Especialidade extends Model
   public function listarTodasCategorias()
   {
     try {
-      $sql = "SELECT * from categoria";
+      $sql = "SELECT * from Categoria";
 
       $sql = $this->db->prepare($sql);
       $sql->execute();
@@ -128,7 +128,7 @@ class Especialidade extends Model
   public function listarTodasProfissoes()
   {
     try {
-      $sql = "SELECT codEspecialidade, nome from especialidade GROUP BY nome";
+      $sql = "SELECT codEspecialidade, nome from Especialidade GROUP BY nome";
 
       $sql = $this->db->prepare($sql);
       $sql->execute();
@@ -142,7 +142,7 @@ class Especialidade extends Model
   public function listarTodasEspecialidades()
   {
     try {
-      $sql = "SELECT codEspecialidade, descricao as nome from especialidade GROUP BY descricao";
+      $sql = "SELECT codEspecialidade, descricao as nome from Especialidade GROUP BY descricao";
 
       $sql = $this->db->prepare($sql);
       $sql->execute();
@@ -158,9 +158,9 @@ class Especialidade extends Model
   {
     try {
       $sql = "SELECT e.codEspecialidade, e.nome, e.descricao, c.codCategoria, c.nome as nomeCategoria
-              FROM especialidade e INNER JOIN categoria c ON c.codCategoria = e.fk_Categoria_codCategoria
+              FROM Especialidade e INNER JOIN Categoria c ON c.codCategoria = e.fk_Categoria_codCategoria
               WHERE e.codEspecialidade IN (SELECT pe.fk_Especialidade_codEspecialidade
-              FROM prestadorespecialidade pe where pe.fk_Prestador_codPrestador = :codPrestador)";
+              FROM PrestadorEspecialidade pe where pe.fk_Prestador_codPrestador = :codPrestador)";
 
       $sql = $this->db->prepare($sql);
       $sql->bindValue(':codPrestador', $codPrestador);
