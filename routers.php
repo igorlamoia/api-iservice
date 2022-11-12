@@ -8,6 +8,7 @@ $routes['/listar/dados-usuario'] = '/Usuario/buscardadosUsuario';
 
 $routes['/cadastrar/prestador'] = '/Prestador/cadastrarPrestador';
 $routes['/listar/todos-prestadores'] = '/Prestador/buscarTodosOsPrestadores';
+$routes['/filtros/listar-prestador'] = '/Prestador/filtrosPrestador';
 
 
 $routes['/listar/servicos'] = '/Servico/listarServicos';

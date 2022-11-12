@@ -107,4 +107,21 @@ class PrestadorController extends Controller {
   }
 
 
+  function filtrosPrestador(){
+    $filtros = $this->getRequestData();
+    $dias = "";
+    //$this->returnJson ($filtros, 404);
+    foreach ($filtros['diasAtendimento'] as $dia) {
+      $dias .= " AND p.diasAtendimento LIKE  CONCAT('%',$dia,'%')";
+    }
+    $filtros['diasAtendimento'] = $dias;
+    $prestadorModel = new Prestador();
+    $prestadoresFiltrados = $prestadorModel->buscarPrestadorPorFiltros($filtros);
+    //if(!count($prestadoresFiltrados)) $this->returnJson(['mensagem'=> "Nenhum prestador encontrado!"], 404);
+    $arrayResposta = [
+      'mensagem'=> "Prestadores filtrados com sucesso !",
+      'payload' => $prestadoresFiltrados
+    ];
+    $this->returnJson($arrayResposta);
+  }
 }
