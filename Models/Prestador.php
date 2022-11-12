@@ -84,6 +84,14 @@ class Prestador extends Model
   {
     try {
       $dias = $filtros['diasAtendimento'];
+      $temHorarioAtendimentoInicio = isset($filtros['horarioAtendimentoInicio'])?  'false' : 'true';
+      $temHorarioAtendimentoFim = isset($filtros['horarioAtendimentoFim'])?  'false' : 'true';
+      //$temDiasAtendimento = isset($filtros['diasAtendimento'])?  'false' : 'true';
+      $temCodEspecialidade = isset($filtros['codEspecialidade'])?  'false' : 'true';
+      $temDescricao = isset($filtros['descricao'])?  'false' : 'true';
+      $temCodCategoria = isset($filtros['codCategoria'])?  'false' : 'true';
+      $temCodCidade = isset($filtros['codCidade'])?  'false' : 'true';
+
       $sql = "SELECT
       DISTINCT u.*,
       p.* FROM Usuario u,
@@ -105,26 +113,25 @@ class Prestador extends Model
       AND esp.fk_Categoria_codCategoria = cat.codCategoria
       AND (
         
-        (false OR  p.horarioAtendimentoInicio = :horarioAtendimentoInicio)
+        ($temHorarioAtendimentoInicio OR  p.horarioAtendimentoInicio = :horarioAtendimentoInicio)
         $dias
-        AND (false OR p.horarioAtendimentoFim = :horarioAtendimentoFim)
-        AND (false OR c.codCidade = :codCidade)
-        AND (false OR esp.codEspecialidade = :codEspecialidade)
-        AND (false OR esp.descricao = :descricao)
-        AND (false OR cat.codCategoria = :codCategoria)
+        AND ($temHorarioAtendimentoFim OR p.horarioAtendimentoFim = :horarioAtendimentoFim)
+        AND ($temCodCidade OR c.codCidade = :codCidade)
+        AND ($temCodEspecialidade OR esp.codEspecialidade = :codEspecialidade)
+        AND ($temDescricao OR esp.descricao = :descricao)
+        AND ($temCodCategoria OR cat.codCategoria = :codCategoria)
         
     )
     ";
       $sql = $this->db->prepare($sql);
      // $sql->bindValue(':nome', $filtros['nome']);
-      $sql->bindValue(':horarioAtendimentoInicio', $filtros['horarioAtendimentoInicio']);
-      $sql->bindValue(':horarioAtendimentoFim', $filtros['horarioAtendimentoFim']);
-      $sql->bindValue(':codCidade', $filtros['codCidade']);
-      //$sql->bindValue(':diasAtendimento', $filtros['diasAtendimento']);
-      $sql->bindValue(':codEspecialidade', $filtros['codEspecialidade']);
-      $sql->bindValue(':descricao', $filtros['descricao']);
-      $sql->bindValue(':codCategoria', $filtros['codCategoria']);
-      
+      $sql->bindValue(':horarioAtendimentoInicio', isset($filtros['horarioAtendimentoInicio']) ? $filtros['horarioAtendimentoInicio'] : 'false');
+      $sql->bindValue(':horarioAtendimentoFim', isset($filtros['horarioAtendimentoFim']) ? $filtros['horarioAtendimentoFim'] : 'false');
+      $sql->bindValue(':codCidade', isset($filtros['codCidade']) ? $filtros['codCidade'] : 'false');
+      //$sql->bindValue(':diasAtendimento', isset($filtros['diasAtendimento']) ? $filtros['diasAtendimento'] : 'false');
+      $sql->bindValue(':codEspecialidade', isset($filtros['codEspecialidade']) ? $filtros['codEspecialidade'] : 'false');
+      $sql->bindValue(':descricao', isset($filtros['descricao']) ? $filtros['descricao'] : 'false');
+      $sql->bindValue(':codCategoria', isset($filtros['codCategoria']) ? $filtros['codCategoria'] : 'false');
       $sql->execute();
       return $sql->fetchAll(\PDO::FETCH_ASSOC);
     } catch (\PDOException $e) {
