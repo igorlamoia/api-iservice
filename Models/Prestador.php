@@ -84,13 +84,13 @@ class Prestador extends Model
   {
     try {
       $dias = $filtros['diasAtendimento'];
-      $temHorarioAtendimentoInicio = isset($filtros['horarioAtendimentoInicio'])?  'false' : 'true';
-      $temHorarioAtendimentoFim = isset($filtros['horarioAtendimentoFim'])?  'false' : 'true';
-      //$temDiasAtendimento = isset($filtros['diasAtendimento'])?  'false' : 'true';
-      $temCodEspecialidade = isset($filtros['codEspecialidade'])?  'false' : 'true';
-      $temDescricao = isset($filtros['descricao'])?  'false' : 'true';
-      $temCodCategoria = isset($filtros['codCategoria'])?  'false' : 'true';
-      $temCodCidade = isset($filtros['codCidade'])?  'false' : 'true';
+      $temHorarioAtendimentoInicio = !empty($filtros['horarioAtendimentoInicio'])?  'false' : 'true';
+      $temHorarioAtendimentoFim = !empty($filtros['horarioAtendimentoFim'])?  'false' : 'true';
+      $temNome = !empty($filtros['nome'])?  'false' : 'true';
+      $temCodEspecialidade = !empty($filtros['codEspecialidade'])?  'false' : 'true';
+      $temDescricao = !empty($filtros['descricao'])?  'false' : 'true';
+      $temCodCategoria = !empty($filtros['codCategoria'])?  'false' : 'true';
+      $temCodCidade = !empty($filtros['codCidade'])?  'false' : 'true';
 
       $sql = "SELECT
       DISTINCT u.*,
@@ -112,26 +112,24 @@ class Prestador extends Model
       AND pe.fk_Especialidade_codEspecialidade = esp.codEspecialidade
       AND esp.fk_Categoria_codCategoria = cat.codCategoria
       AND (
-        
-        ($temHorarioAtendimentoInicio OR  p.horarioAtendimentoInicio = :horarioAtendimentoInicio)
+
+        ($temHorarioAtendimentoInicio OR  p.horarioAtendimentoInicio <= :horarioAtendimentoInicio)
         $dias
-        AND ($temHorarioAtendimentoFim OR p.horarioAtendimentoFim = :horarioAtendimentoFim)
+        AND ($temNome OR u.nome LIKE  CONCAT('%',:nome,'%'))
+        AND ($temHorarioAtendimentoFim OR p.horarioAtendimentoFim >= :horarioAtendimentoFim)
         AND ($temCodCidade OR c.codCidade = :codCidade)
         AND ($temCodEspecialidade OR esp.codEspecialidade = :codEspecialidade)
         AND ($temDescricao OR esp.descricao = :descricao)
         AND ($temCodCategoria OR cat.codCategoria = :codCategoria)
-        
-    )
-    ";
+      )";
       $sql = $this->db->prepare($sql);
-     // $sql->bindValue(':nome', $filtros['nome']);
-      $sql->bindValue(':horarioAtendimentoInicio', isset($filtros['horarioAtendimentoInicio']) ? $filtros['horarioAtendimentoInicio'] : 'false');
-      $sql->bindValue(':horarioAtendimentoFim', isset($filtros['horarioAtendimentoFim']) ? $filtros['horarioAtendimentoFim'] : 'false');
-      $sql->bindValue(':codCidade', isset($filtros['codCidade']) ? $filtros['codCidade'] : 'false');
-      //$sql->bindValue(':diasAtendimento', isset($filtros['diasAtendimento']) ? $filtros['diasAtendimento'] : 'false');
-      $sql->bindValue(':codEspecialidade', isset($filtros['codEspecialidade']) ? $filtros['codEspecialidade'] : 'false');
-      $sql->bindValue(':descricao', isset($filtros['descricao']) ? $filtros['descricao'] : 'false');
-      $sql->bindValue(':codCategoria', isset($filtros['codCategoria']) ? $filtros['codCategoria'] : 'false');
+      $sql->bindValue(':horarioAtendimentoInicio', Controller::isSetThanReturnToQuery($filtros, 'horarioAtendimentoInicio'));
+      $sql->bindValue(':horarioAtendimentoFim', Controller::isSetThanReturnToQuery($filtros, 'horarioAtendimentoFim'));
+      $sql->bindValue(':codCidade', Controller::isSetThanReturnToQuery($filtros, 'codCidade'));
+      $sql->bindValue(':nome', Controller::isSetThanReturnToQuery($filtros, 'nome'));
+      $sql->bindValue(':codEspecialidade', Controller::isSetThanReturnToQuery($filtros, 'codEspecialidade'));
+      $sql->bindValue(':descricao', Controller::isSetThanReturnToQuery($filtros, 'descricao'));
+      $sql->bindValue(':codCategoria', Controller::isSetThanReturnToQuery($filtros, 'codCategoria'));
       $sql->execute();
       return $sql->fetchAll(\PDO::FETCH_ASSOC);
     } catch (\PDOException $e) {
@@ -141,5 +139,3 @@ class Prestador extends Model
     }
   }
 }
-//
-//(false OR (lower(u.nome) LIKE lower('%:nome%')))

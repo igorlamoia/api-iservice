@@ -9,15 +9,17 @@ use Models\Prestador;
 use Providers\Endereco as EnderecoProvider;
 
 // Quero buscar informações do usuário no banco pelo cpf
-class PrestadorController extends Controller {
-  public function buscarInformacoesPrestador() {
+class PrestadorController extends Controller
+{
+  public function buscarInformacoesPrestador()
+  {
     $array = $this->getRequestData();
     $cpf = $array['cpf'];
     $prestadorModel = new Prestador();
 
     $respostaDoBanco = $prestadorModel->buscarInformacoesPrestadorNoBancoDeDados($cpf);
 
-    if($respostaDoBanco) {
+    if ($respostaDoBanco) {
       $this->returnJson([
         'mensagem' => 'Informações do prestador encontradas com sucesso!',
         'informacoes' => $respostaDoBanco
@@ -25,28 +27,29 @@ class PrestadorController extends Controller {
     } else {
       $this->returnJson(['mensagem' => 'Prestador não encontrado!'], 404);
     }
-
   }
 
-  public function cadastrarPrestador() {
+  public function cadastrarPrestador()
+  {
     $requisicao = $this->getRequestData();
     $prestadorModel = new Prestador();
     $prestadorCadastrado = $prestadorModel->buscarPrestadorPorCodUsuario($requisicao['codUsuario']);
-    if($prestadorCadastrado) return $this->returnJson(['mensagem' => 'Prestador já cadastrado!'], 400);
+    if ($prestadorCadastrado) return $this->returnJson(['mensagem' => 'Prestador já cadastrado!'], 400);
 
     $codPrestador = $prestadorModel->cadastrarPrestador($requisicao);
-    if(!$codPrestador) $this->returnJson(['mensagem' => 'Erro ao cadastrar prestador!'], 500);
+    if (!$codPrestador) $this->returnJson(['mensagem' => 'Erro ao cadastrar prestador!'], 500);
 
     $especialidadeModel = new Especialidade();
-    foreach($requisicao['especialidades'] as $especialidade) {
+
+    foreach ($requisicao['especialidades'] as $especialidade) {
       $codEspecialidade = $especialidadeModel->buscarCodEspecialidade($especialidade);
 
-      if(!$codEspecialidade) {
+      if (!$codEspecialidade) {
         $codEspecialidade = $especialidadeModel->cadastrar($especialidade);
-        if(!$codEspecialidade) $this->returnJson(['mensagem' => 'Erro ao cadastrar especialidade!'], 500);
+        if (!$codEspecialidade) $this->returnJson(['mensagem' => 'Erro ao cadastrar especialidade!'], 500);
       }
       $EspecialidadeCadastrada = $especialidadeModel->buscarPrestadorEspecialidade($codPrestador, $codEspecialidade);
-      if(!$EspecialidadeCadastrada) {
+      if (!$EspecialidadeCadastrada) {
         $especialidadeModel->cadastrarPrestadorEspecialidade($codPrestador, $codEspecialidade);
       }
     }
@@ -60,7 +63,8 @@ class PrestadorController extends Controller {
     ], 201);
   }
 
-  public function buscarTodosOsPrestadores () {
+  public function buscarTodosOsPrestadores()
+  {
     $prestadorModel = new Prestador();
     $prestadores = $prestadorModel->informacoesPrestadores();
     $enderecoModel = new Endereco();
@@ -83,13 +87,13 @@ class PrestadorController extends Controller {
         'diasAtendimento' => $prestador['diasAtendimento'],
       ];
       $cidades = $enderecoModel->buscarTodasCidadesPorCodPrestador($prestador['codPrestador']);
-      if($cidades) {
+      if ($cidades) {
         $prestadorDados['cidadesAtendimento'] = $cidades;
       } else {
         $prestadorDados['cidadesAtendimento'] = [];
       }
       $especialidades = $especialidadeModel->buscarEspecialidadesPorCodPrestador($prestador['codPrestador']);
-      if($especialidades) {
+      if ($especialidades) {
         $prestadorDados['especialidades'] = $especialidades;
       } else {
         $prestadorDados['especialidades'] = [];
@@ -98,7 +102,7 @@ class PrestadorController extends Controller {
     }
     // $especialidade = new Especialidade();
     // $especialidades = $especialidade->buscarEspecialidadesPrestadpr();
-    if($prestadores) {
+    if ($prestadores) {
       $payload['mensagem'] = 'Prestadores listados com sucesso!';
       $this->returnJson($payload, 200);
     } else {
@@ -107,7 +111,8 @@ class PrestadorController extends Controller {
   }
 
 
-  function filtrosPrestador(){
+  function filtrosPrestador()
+  {
     $filtros = $this->getRequestData();
     $dias = "";
     //$this->returnJson ($filtros, 404);
@@ -119,7 +124,7 @@ class PrestadorController extends Controller {
     $prestadoresFiltrados = $prestadorModel->buscarPrestadorPorFiltros($filtros);
     //if(!count($prestadoresFiltrados)) $this->returnJson(['mensagem'=> "Nenhum prestador encontrado!"], 404);
     $arrayResposta = [
-      'mensagem'=> "Prestadores filtrados com sucesso !",
+      'mensagem' => "Prestadores filtrados com sucesso !",
       'payload' => $prestadoresFiltrados
     ];
     $this->returnJson($arrayResposta);

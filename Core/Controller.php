@@ -44,6 +44,14 @@ class Controller
 		}
 	}
 
+	public static function isSetThanReturnToQuery($data, $key)
+	{
+		if (isset($data[$key])) {
+			return $data[$key];
+		}
+		return null;
+	}
+
 	public function returnJson($array, $code = 200)
 	{
 		http_response_code($code);
