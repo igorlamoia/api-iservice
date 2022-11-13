@@ -18,3 +18,5 @@ $routes['/listar/todas-especialidades'] = '/Servico/listarTodasEspecialidades';
 
 // Exemplos didáticos pra galera:
 $routes['/buscar-informacoes/prestador'] = '/Prestador/buscarInformacoesPrestador';
+
+$routes['/buscar-todas-cidades/prestadores'] = '/Servico/buscarTodasCidadesPrestadores';

@@ -209,4 +209,20 @@ class Endereco extends Model
       return false;
     }
   }
+
+  public function buscarTodasCidadesCadastradas()
+  {
+    try {
+      $sql = "SELECT * FROM Cidade";
+
+      $sql = $this->db->prepare($sql);
+      $sql->execute();
+
+      return $sql->fetchAll(\PDO::FETCH_ASSOC);
+    } catch (\Throwable $th) {
+      $controller = new Controller();
+      $controller->returnJson(['mensagem' => 'Erro ao buscar cidades do prestador!', 'erro' => $th->errorInfo[2]], 500);
+      return false;
+    }
+  }
 }
