@@ -115,7 +115,6 @@ class PrestadorController extends Controller
   {
     $filtros = $this->getRequestData();
     $dias = "";
-    //$this->returnJson ($filtros, 404);
     foreach ($filtros['diasAtendimento'] as $dia) {
       $dias .= " AND p.diasAtendimento LIKE  CONCAT('%',$dia,'%')";
     }
@@ -123,9 +122,40 @@ class PrestadorController extends Controller
     $prestadorModel = new Prestador();
     $prestadoresFiltrados = $prestadorModel->buscarPrestadorPorFiltros($filtros);
     //if(!count($prestadoresFiltrados)) $this->returnJson(['mensagem'=> "Nenhum prestador encontrado!"], 404);
+    if (count($prestadoresFiltrados) == 0) {
+      $arrayResposta = [
+        'mensagem' => "Prestadores filtrados com sucesso !",
+        'payload' => $prestadoresFiltrados,
+        'total' => 0
+      ];
+      $this->returnJson($arrayResposta);
+    }
+
+    // caso ache algum prestador Pegando endereço e especialidades do mesmo
+    $enderecoModel = new Endereco();
+    $especialidadeModel = new Especialidade();
+
+    $prestadoresDTO = [];
+    foreach ($prestadoresFiltrados as $prestador) {
+      $cidades = $enderecoModel->buscarTodasCidadesPorCodPrestador($prestador['codPrestador']);
+      if ($cidades) {
+        $prestador['cidadesAtendimento'] = $cidades;
+      } else {
+        $prestador['cidadesAtendimento'] = [];
+      }
+      $especialidades = $especialidadeModel->buscarEspecialidadesPorCodPrestador($prestador['codPrestador']);
+      if ($especialidades) {
+        $prestador['especialidades'] = $especialidades;
+      } else {
+        $prestador['especialidades'] = [];
+      }
+      $prestadoresDTO[] = $prestador;
+    }
+
     $arrayResposta = [
       'mensagem' => "Prestadores filtrados com sucesso !",
-      'payload' => $prestadoresFiltrados
+      'payload' => $prestadoresDTO,
+      'total' => count($prestadoresDTO)
     ];
     $this->returnJson($arrayResposta);
   }
