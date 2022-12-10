@@ -420,3 +420,32 @@ ALTER TABLE `Prestador` CHANGE `horarioDisponivel` `horarioAtendimentoInicio` IN
 ALTER TABLE `Prestador` ADD COLUMN `horarioAtendimentoFim` INT(5) NULL DEFAULT NULL;
 
 ALTER TABLE `Prestador` ADD COLUMN `diasAtendimento` varchar(20) NULL;
+
+
+ALTER TABLE
+  `Atendimento` CHANGE `data` `dataStatus` TIMESTAMP NULL;
+
+ALTER TABLE
+  `Atendimento` MODIFY `booleanHaveraVisita` INT DEFAULT '2' NOT NULL;
+
+ALTER TABLE
+  `Atendimento` MODIFY `dataStatus` timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL;
+
+create table
+  `Status` (
+    `idStatus` int unsigned not null auto_increment primary key,
+    `nomeStatus` VARCHAR(50) not null,
+    `descricaoStatus` varchar(255) null
+  );
+
+ALTER TABLE
+  `Atendimento` MODIFY `booleanHaveraVisita` int(10) DEFAULT '2' NOT NULL;
+ALTER TABLE
+  `Status` MODIFY `idStatus` int(10) NOT NULL auto_increment;
+
+ALTER TABLE
+  `Atendimento`
+ADD
+  CONSTRAINT `FK_Status` FOREIGN KEY (`booleanHaveraVisita`) REFERENCES `Status` (`idStatus`) ON UPDATE NO ACTION ON DELETE NO ACTION;
+ALTER TABLE
+  `Atendimento` MODIFY `booleanHaveraVisita` int(11) DEFAULT '1' NOT NULL;

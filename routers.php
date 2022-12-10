@@ -20,3 +20,8 @@ $routes['/listar/todas-especialidades'] = '/Servico/listarTodasEspecialidades';
 $routes['/buscar-informacoes/prestador'] = '/Prestador/buscarInformacoesPrestador';
 
 $routes['/buscar-todas-cidades/prestadores'] = '/Servico/buscarTodasCidadesPrestadores';
+
+
+$routes['/cadastrar/solicitacao'] = '/Atendimento/criarSolicitacao';
+$routes['/listar/demandas-prestador'] = '/Atendimento/buscarDemandasPrestador';
+$routes['/listar/solicitacoes-usuario'] = '/Atendimento/buscarSolicitacoesUsuario';
