@@ -32,7 +32,9 @@ class Atendimento extends Model
     public function buscarDemandas($data)
     {
         try {
-            $sql = "SELECT * from Atendimento a, Usuario u where a.fk_DemandaEscolher_codPrestador = :codPrestador and a.fk_DemandaEscolher_codUsuario = u.codUsuario";
+            $sql = "SELECT * from Atendimento a, Usuario u 
+                    where a.fk_DemandaEscolher_codPrestador = :codPrestador and a.fk_DemandaEscolher_codUsuario = u.codUsuario
+                    ORDER BY a.dataStatus DESC";
 
             $sql = $this->db->prepare($sql);
             $sql->bindValue(':codPrestador', $data['codPrestador']);
@@ -54,7 +56,8 @@ class Atendimento extends Model
                 where
                     a.fk_DemandaEscolher_codUsuario = :codUsuario
                     and p.codPrestador = a.fk_DemandaEscolher_codPrestador
-                    and u.codUsuario = p.fk_Usuario_codUsuario";
+                    and u.codUsuario = p.fk_Usuario_codUsuario
+                ORDER BY a.dataStatus DESC";
 
             $sql = $this->db->prepare($sql);
             $sql->bindValue(':codUsuario', $data['codUsuario']);
@@ -67,5 +70,25 @@ class Atendimento extends Model
             return false;
         }
     }
+
+    public function atualizarAtendimento($data)
+    {
+        try {
+            $sql = "UPDATE Atendimento a SET a.codStatus = :codStatus, a.dataStatus = CURRENT_TIMESTAMP 
+                    WHERE a.codAtendimento = :codAtendimento";
+
+            $sql = $this->db->prepare($sql);
+            $sql->bindValue(':codAtendimento', $data['codAtendimento']);
+            $sql->bindValue(':codStatus', $data['codStatus']);
+
+            return $sql->execute();
+        } catch (\PDOException $th) {
+            $controller = new Controller();
+            $controller->returnJson(['mensagem' => 'Erro ao Atualizar atendimento :(', 'erro' => $th], 500);
+            return false;
+        }
+    }
+
+
 
 }
