@@ -5,6 +5,7 @@ namespace Controllers;
 use Core\Controller;
 use Models\Endereco;
 use Models\Especialidade;
+use Models\Nota;
 use Models\Prestador;
 use Providers\Endereco as EnderecoProvider;
 
@@ -86,6 +87,21 @@ class PrestadorController extends Controller
         'dataNascimento' => $prestador['dataNascimento'],
         'diasAtendimento' => $prestador['diasAtendimento'],
       ];
+      $notaModel = new Nota();
+      $notas = $notaModel->buscarTodasNotasEAvaliacoesDoPrestador($prestador['codPrestador']);
+      if ($notas) {
+        $qtdNotas = count($notas);
+        $total = 0;
+        foreach ($notas as $nota) {
+          $total += (float) $nota['nota'];
+        }
+        $prestadorDados['nota'] = (float) $total/$qtdNotas;
+        $prestadorDados['avaliacaoMaisRecente'] = $notas[$qtdNotas - 1]['texto'];
+      } else {
+        $prestadorDados['nota'] = null;
+        $prestadorDados['avaliacaoMaisRecente'] = null;
+      }
+
       $cidades = $enderecoModel->buscarTodasCidadesPorCodPrestador($prestador['codPrestador']);
       if ($cidades) {
         $prestadorDados['cidadesAtendimento'] = $cidades;
@@ -137,6 +153,21 @@ class PrestadorController extends Controller
 
     $prestadoresDTO = [];
     foreach ($prestadoresFiltrados as $prestador) {
+      $notaModel = new Nota();
+      $notas = $notaModel->buscarTodasNotasEAvaliacoesDoPrestador($prestador['codPrestador']);
+      if ($notas) {
+        $qtdNotas = count($notas);
+        $total = 0;
+        foreach ($notas as $nota) {
+          $total += (float) $nota['nota'];
+        }
+        $prestador['nota'] = (float) $total/$qtdNotas;
+        $prestador['avaliacaoMaisRecente'] = $notas[$qtdNotas - 1]['texto'];
+      } else {
+        $prestador['nota'] = null;
+        $prestador['avaliacaoMaisRecente'] = null;
+      }
+
       $cidades = $enderecoModel->buscarTodasCidadesPorCodPrestador($prestador['codPrestador']);
       if ($cidades) {
         $prestador['cidadesAtendimento'] = $cidades;
